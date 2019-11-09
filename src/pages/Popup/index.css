@@ -1,0 +1,16 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+}
+
+body {
+  width: 360px;
+  height: 560px;
+}
+
+#app-container {
+  width: 100%;
+  height: 100%;
+}

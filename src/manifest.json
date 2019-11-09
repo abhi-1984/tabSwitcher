@@ -1,0 +1,23 @@
+{
+  "manifest_version": 2,
+  "name": "Tab Switcher",
+  "version": "2.0.4",
+  "description": "An open source tab manager for Chrome",
+  "author": "Abhi",
+  "commands": {
+    "_execute_browser_action": {
+      "suggested_key": {
+        "default": "Ctrl+H"
+      }
+    }
+  },
+  "icons": {
+    "128": "icon-128.png"
+  },
+  "browser_action": {
+    "default_icon": "icon-34.png",
+    "default_popup": "popup.html"
+  },
+  "permissions": ["tabs"],
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+}
