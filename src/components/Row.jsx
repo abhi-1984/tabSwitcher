@@ -82,9 +82,10 @@ function Row({ tab, onRemove, onSelect }) {
       <Title>{tab.title}</Title>
 
       <CloseView
-        onClick={() => {
+        onClick={(event) => {
           console.log('closed tab is ', tab);
           onRemove(tab);
+          event.stopPropagation();
         }}
         className="closeView"
       >
