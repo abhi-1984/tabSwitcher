@@ -15,6 +15,7 @@
   "dependencies": {
     "@hot-loader/react-dom": "^16.9.0",
     "framer-motion": "^1.6.15",
+    "fuse.js": "^3.4.5",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
     "react-hot-loader": "^4.12.14",

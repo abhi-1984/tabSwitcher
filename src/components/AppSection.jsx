@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import Row from './Row';
+import { ClearSearchIcon } from './Icons';
+import { motion } from 'framer-motion';
 
 const AppSectionWrapper = styled.div`
   background: #ffffff;
@@ -46,19 +48,31 @@ const SearchView = styled.div`
   background: #ffffff;
   box-shadow: inset 0px -1px 0px rgba(0, 0, 0, 0.08);
   border-radius: 10px 10px 0px 0px;
+  position: relative;
 `;
 
 const SearchInput = styled.input`
   all: unset;
   width: 100%;
   height: 100%;
-  font-style: italic;
-  font-weight: 300;
+  font-weight: 400;
   font-size: 16px;
   line-height: 24px;
   color: #030d29;
-  opacity: 0.4;
   padding: 0 20px;
+  &:placeholder {
+    opacity: 0.4;
+  }
+`;
+
+const SearchFieldResetOption = styled(motion.div)`
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0;
+  transition: all 200ms ease-in-out;
+  cursor: pointer;
 `;
 
 const ListView = styled.div`
@@ -68,12 +82,34 @@ const ListView = styled.div`
   background-color: #f9fafc;
 `;
 
-function AppSection({ tabs, onRemove, onSelect, isAudible }) {
+function AppSection({
+  tabs,
+  onRemove,
+  onSelect,
+  isAudible,
+  filterValue,
+  onFilterChange,
+  onClearSearchInput,
+}) {
   return (
     <AppSectionWrapper>
       <ContentView>
         <SearchView>
-          <SearchInput placeholder="Search Tabs..." autoFocus type="text" />
+          <SearchInput
+            spellCheck={false}
+            value={filterValue}
+            onChange={onFilterChange}
+            placeholder="Search Tabs..."
+            autoFocus
+            type="text"
+          />
+          <SearchFieldResetOption
+            animate={{ opacity: filterValue.length > 0 ? 0.24 : 0 }}
+            whileHover={{ opacity: filterValue.length > 0 && 0.48 }}
+            onClick={onClearSearchInput}
+          >
+            <ClearSearchIcon />
+          </SearchFieldResetOption>
         </SearchView>
         {console.log('tabs are ', tabs)}
         <ListView>

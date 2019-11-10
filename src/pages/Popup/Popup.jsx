@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import './Popup.css';
 import styled from 'styled-components';
 import Tabs from '../../components/Tabs';
+import Fuse from 'fuse.js';
 import AppSection from '../../components/AppSection';
 
 const AppWrapper = styled.div`
@@ -19,6 +20,7 @@ function Popup() {
   const [currentWindowId, setCurrentWindowId] = useState(null);
   const [highlightedIndex, setHighlightedIndex] = useState(0);
   const [isAudible, setAudible] = useState(false);
+  const [filterValue, setFilterValue] = useState('');
 
   useEffect(() => {
     setTimeout(() => {
@@ -63,16 +65,45 @@ function Popup() {
     setHighlightedIndex(highlightedIndex);
   };
 
+  const handleFilterChange = ({ target: { value } }) => {
+    setFilterValue(value);
+    setHighlightedIndex(
+      value === '' ? this.getActiveIndex(tabs, currentWindowId) : 0
+    );
+  };
+
+  const filterTabs = (tabs, filterValue) => {
+    if (filterValue === '') {
+      return tabs;
+    }
+
+    const options = {
+      threshold: 0.5,
+      keys: ['title', 'url'],
+    };
+
+    const fuse = new Fuse(tabs, options);
+
+    return fuse.search(filterValue);
+  };
+
+  const handleClearSearchInput = () => {
+    setFilterValue('');
+  };
+
   return (
     <AppWrapper>
       <Tabs />
       <AppSection
-        tabs={tabs}
+        tabs={filterTabs(tabs, filterValue)}
         onChange={handleHighlightChange}
         onRemove={handleTabRemove}
         highlightedIndex={highlightedIndex}
         onSelect={handleTabSelect}
         isAudible={isAudible}
+        filterValue={filterValue}
+        onFilterChange={handleFilterChange}
+        onClearSearchInput={handleClearSearchInput}
       />
     </AppWrapper>
   );
