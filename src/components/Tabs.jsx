@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const TabsView = styled.div`
   width: 100%;
-  height: 60px;
+  height: 64px;
   display: flex;
   align-items: center;
   justify-content: flex-start;

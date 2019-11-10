@@ -18,16 +18,32 @@ function Popup() {
   const [tabs, setTabs] = useState(null);
   const [currentWindowId, setCurrentWindowId] = useState(null);
   const [highlightedIndex, setHighlightedIndex] = useState(0);
+  const [isAudible, setAudible] = useState(false);
 
   useEffect(() => {
-    chrome.tabs.query({}, (tabs) => getTabs(tabs));
+    setTimeout(() => {
+      const promises = [
+        new Promise((resolve) => {
+          chrome.tabs.query({}, (tabs) => resolve(tabs));
+        }),
+        new Promise((resolve) => {
+          chrome.windows.getCurrent({}, ({ id }) => resolve(id));
+        }),
+      ];
+
+      Promise.all(promises).then(([tabs, currentWindowId]) => {
+        const highlightedIndex = getActiveIndex(tabs, currentWindowId);
+        setTabs(tabs);
+        setCurrentWindowId(currentWindowId);
+        setHighlightedIndex(highlightedIndex);
+        setAudible(tabs.audible);
+      });
+    }, 200);
   }, []);
 
-  const getTabs = (tabs) => {
-    console.log('tabs are ', tabs);
-
-    setTabs(tabs);
-  };
+  const getActiveIndex = (tabs, currentWindowId) =>
+    tabs &&
+    tabs.findIndex((tab) => tab.windowId === currentWindowId && tab.active);
 
   const handleTabRemove = (tab) => {
     console.log('clicked tab is ', tab);
@@ -43,13 +59,20 @@ function Popup() {
     chrome.tabs.update(tab.id, { active: true });
   };
 
+  const handleHighlightChange = (highlightedIndex) => {
+    setHighlightedIndex(highlightedIndex);
+  };
+
   return (
     <AppWrapper>
       <Tabs />
       <AppSection
         tabs={tabs}
+        onChange={handleHighlightChange}
         onRemove={handleTabRemove}
+        highlightedIndex={highlightedIndex}
         onSelect={handleTabSelect}
+        isAudible={isAudible}
       />
     </AppWrapper>
   );

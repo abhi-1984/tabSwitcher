@@ -22,7 +22,7 @@ const FooterView = styled.footer`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
+  padding: 10px 20px;
   position: absolute;
   left: 0;
   bottom: 0;
@@ -30,9 +30,9 @@ const FooterView = styled.footer`
 `;
 
 const FooterLink = styled.a`
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: 300;
+  font-size: 14;
+  line-height: 20px;
+  font-weight: 400;
   color: #9a9ea9;
   text-decoration: none;
   span {
@@ -42,7 +42,7 @@ const FooterLink = styled.a`
 
 const SearchView = styled.div`
   width: 100%;
-  height: 64px;
+  height: 56px;
   background: #ffffff;
   box-shadow: inset 0px -1px 0px rgba(0, 0, 0, 0.08);
   border-radius: 10px 10px 0px 0px;
@@ -63,19 +63,19 @@ const SearchInput = styled.input`
 
 const ListView = styled.div`
   width: 100%;
-  height: 372px;
+  height: 408px;
   overflow: scroll;
-  background-color: white;
+  background-color: #f9fafc;
 `;
 
-function AppSection({ tabs, onRemove, onSelect }) {
+function AppSection({ tabs, onRemove, onSelect, isAudible }) {
   return (
     <AppSectionWrapper>
       <ContentView>
         <SearchView>
           <SearchInput placeholder="Search Tabs..." autoFocus type="text" />
         </SearchView>
-
+        {console.log('tabs are ', tabs)}
         <ListView>
           {tabs &&
             tabs.map((tab, index) => (
@@ -84,6 +84,7 @@ function AppSection({ tabs, onRemove, onSelect }) {
                 key={index}
                 onRemove={onRemove}
                 onSelect={onSelect}
+                isAudible={isAudible}
               />
             ))}
         </ListView>
