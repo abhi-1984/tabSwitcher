@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { ClearIcon, MuteIcon, AudibleIcon, PinIcon } from './Icons';
+import { ClearIcon, MuteIcon, AudibleIcon, PinIcon, UnpinIcon } from './Icons';
 
 const RowView = styled(motion.div)`
   cursor: pointer;
@@ -98,15 +98,16 @@ const favIconPlaceholder = (
 
 function Row({ tab, onRemove, onSelect }) {
   const [isMuted, setMuted] = useState(tab.mutedInfo.muted);
+  const [isPinned, setPinned] = useState(tab.pinned);
 
   const handleAudioPlayback = (tab) => {
-    if (isMuted) {
-      chrome.tabs.update(tab.id, { muted: false });
-      setMuted(false);
-    } else {
-      chrome.tabs.update(tab.id, { muted: true });
-      setMuted(true);
-    }
+    chrome.tabs.update(tab.id, { muted: isMuted ? false : true });
+    setMuted(!isMuted);
+  };
+
+  const handlePinTab = (tab) => {
+    chrome.tabs.update(tab.id, { pinned: isPinned ? false : true });
+    setPinned(!isPinned);
   };
 
   return (
@@ -126,8 +127,6 @@ function Row({ tab, onRemove, onSelect }) {
 
       <Title>{tab.title}</Title>
 
-      {console.log('tab is muted', tab.muted)}
-
       <RowOptions className="options-wrapper">
         {tab.audible && (
           <RowOption
@@ -143,11 +142,12 @@ function Row({ tab, onRemove, onSelect }) {
 
         <RowOption
           onClick={(event) => {
+            handlePinTab(tab);
             event.stopPropagation();
           }}
           action="pin"
         >
-          <PinIcon />
+          {isPinned ? <UnpinIcon /> : <PinIcon />}
         </RowOption>
 
         <RowOption
