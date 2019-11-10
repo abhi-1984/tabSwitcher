@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import Row from './Row';
-import { ClearSearchIcon } from './Icons';
+import { ClearSearchIcon, GoogleSearchIcon } from './Icons';
 import { motion } from 'framer-motion';
+import GoogleSearchImage from '../assets/img/google.png';
 
 const AppSectionWrapper = styled.div`
   background: #ffffff;
@@ -82,6 +83,21 @@ const ListView = styled.div`
   background-color: #f9fafc;
 `;
 
+const SearchIndicationView = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+`;
+
+const SearchTextIndicator = styled.div`
+  font-size: 16px;
+  line-height: 24px;
+  margin-top: 16px;
+`;
+
 function AppSection({
   tabs,
   onRemove,
@@ -91,6 +107,19 @@ function AppSection({
   onFilterChange,
   onClearSearchInput,
 }) {
+  const openInNewTab = (url) => {
+    console.log('open url ', url);
+    window.open(url, '_blank');
+  };
+
+  const onSearch = (event) => {
+    if (tabs && filterValue.length >= 1 && tabs.length < 1) {
+      if (event.key === 'Enter') {
+        openInNewTab(`https://www.google.com/search?q=${filterValue}`);
+      }
+    }
+  };
+
   return (
     <AppSectionWrapper>
       <ContentView>
@@ -102,6 +131,7 @@ function AppSection({
             placeholder="Search Tabs..."
             autoFocus
             type="text"
+            onKeyDown={onSearch}
           />
           <SearchFieldResetOption
             animate={{ opacity: filterValue.length > 0 ? 0.24 : 0 }}
@@ -123,6 +153,14 @@ function AppSection({
                 isAudible={isAudible}
               />
             ))}
+          {tabs && filterValue.length >= 1 && tabs.length < 1 && (
+            <SearchIndicationView>
+              <GoogleSearchIcon />
+              <SearchTextIndicator>
+                Enter and Search on Google
+              </SearchTextIndicator>
+            </SearchIndicationView>
+          )}
         </ListView>
       </ContentView>
 
