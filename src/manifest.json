@@ -18,6 +18,6 @@
     "default_icon": "icon-34.png",
     "default_popup": "popup.html"
   },
-  "permissions": ["tabs"],
+  "permissions": ["tabs", "bookmarks"],
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
 }

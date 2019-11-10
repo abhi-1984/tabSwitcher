@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import Tabs from '../../components/Tabs';
 import Fuse from 'fuse.js';
 import AppSection from '../../components/AppSection';
+import BookmarksSection from '../../components/BookmarksSection';
 
 const AppWrapper = styled.div`
   background-color: #f9fafc;
@@ -21,6 +22,8 @@ function Popup() {
   const [highlightedIndex, setHighlightedIndex] = useState(0);
   const [isAudible, setAudible] = useState(false);
   const [filterValue, setFilterValue] = useState('');
+  const [activeTab, setActiveTab] = useState('Tabs');
+  const [bookmarks, setBooksmarks] = useState([]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -91,20 +94,37 @@ function Popup() {
     setFilterValue('');
   };
 
+  const onTabChange = (tabName) => {
+    setActiveTab(tabName);
+  };
+
+  const fetchBookmarks = (items) => {
+    console.log('bookmarks are', items);
+    setBooksmarks(items);
+  };
+
+  useEffect(() => {
+    chrome.bookmarks.getTree(fetchBookmarks);
+  }, []);
+
   return (
     <AppWrapper>
-      <Tabs />
-      <AppSection
-        tabs={filterTabs(tabs, filterValue)}
-        onChange={handleHighlightChange}
-        onRemove={handleTabRemove}
-        highlightedIndex={highlightedIndex}
-        onSelect={handleTabSelect}
-        isAudible={isAudible}
-        filterValue={filterValue}
-        onFilterChange={handleFilterChange}
-        onClearSearchInput={handleClearSearchInput}
-      />
+      <Tabs activeTab={activeTab} onTabChange={onTabChange} />
+      {activeTab === 'Tabs' ? (
+        <AppSection
+          tabs={filterTabs(tabs, filterValue)}
+          onChange={handleHighlightChange}
+          onRemove={handleTabRemove}
+          highlightedIndex={highlightedIndex}
+          onSelect={handleTabSelect}
+          isAudible={isAudible}
+          filterValue={filterValue}
+          onFilterChange={handleFilterChange}
+          onClearSearchInput={handleClearSearchInput}
+        />
+      ) : (
+        <BookmarksSection />
+      )}
     </AppWrapper>
   );
 }

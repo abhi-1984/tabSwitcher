@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import Row from './Row';
 import { ClearSearchIcon, GoogleSearchIcon } from './Icons';
 import { motion } from 'framer-motion';
-import GoogleSearchImage from '../assets/img/google.png';
 
 const AppSectionWrapper = styled.div`
   background: #ffffff;

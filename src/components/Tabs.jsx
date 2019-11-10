@@ -8,25 +8,44 @@ const TabsView = styled.div`
   align-items: center;
   justify-content: flex-start;
   padding: 0 20px;
+  position: relative;
 `;
 
 const Tab = styled.div`
   font-size: 16px;
   line-height: 24px;
-  color: ${(props) => (props.isActive ? '#0057ff' : '#030d29;')}
+  color: ${(props) => (props.isActive ? '#0057ff' : '#030d29')};
   cursor: pointer;
-  &:last-child {
-    margin-left: 32px;
+  margin-bottom: 6px;
+  &:first-child {
+    margin-right: 32px;
   }
 `;
 
-function Tabs() {
-  const [selectedTab, setSelectedTab] = useState('Tabs');
+const ActiveTabIndicator = styled.div`
+  position: absolute;
+  width: ${(props) => (props.activeTab === 'Tabs' ? '35px' : '81px')};
+  height: 2px;
+  background-color: #0057ff;
+  border-radius: 1px;
+  left: ${(props) => (props.activeTab === 'Tabs' ? '20px' : '87px')};
+  bottom: 16px;
+  transition: all 400ms cubic-bezier(0.075, 0.82, 0.165, 1);
+`;
 
+function Tabs({ activeTab, onTabChange }) {
   return (
     <TabsView>
-      <Tab isActive={selectedTab === 'Tabs'}>Tabs</Tab>
-      <Tab isActive={selectedTab === 'Bookmarks'}>Bookmarks</Tab>
+      <Tab onClick={() => onTabChange('Tabs')} isActive={activeTab === 'Tabs'}>
+        Tabs
+      </Tab>
+      <Tab
+        onClick={() => onTabChange('Bookmarks')}
+        isActive={activeTab === 'Bookmarks'}
+      >
+        Bookmarks
+      </Tab>
+      <ActiveTabIndicator activeTab={activeTab} />
     </TabsView>
   );
 }
